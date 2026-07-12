@@ -43,7 +43,9 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+/* ===== 注意：此文件从 ../../../design-tokens/tokens.css 复制而来 ===== */
+/* ===== 如需修改颜色/字体/间距，请改上游文件，不要手动编辑此文件 ===== */
+:root {
     --color-bg-deep: #0b2b3b;
     --color-accent: #8fd8ef;
     --color-accent-warm: #e8c98a;
