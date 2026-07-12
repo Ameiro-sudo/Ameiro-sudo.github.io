@@ -8,7 +8,7 @@
   -webkit-backdrop-filter: blur(12px) saturate(1.2);
   border-radius: var(--radius-card);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255,255,255,0.12);
+  box-shadow: var(--shadow-card), inset 0 1px 0 var(--glass-border);
   overflow: hidden;
   opacity: 0;
   transform: translateY(24px);
@@ -60,7 +60,7 @@
   font-size: clamp(0.9rem,2.5vw,1.3rem);
   font-weight: 600;
   color: var(--text-primary);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+  text-shadow: 0 2px 8px var(--shadow-card-color, rgba(0,0,0,0.45));
   border-left: 4px solid var(--color-accent);
   padding-left: 0.9rem;
   margin-bottom: 1rem;
@@ -124,8 +124,8 @@
 }
 
 .service-item.copied {
-  background: rgba(100,220,180,0.25) !important;
-  border-color: rgba(100,220,180,0.45) !important;
+  background: var(--color-success-glow, rgba(100,220,180,0.25)) !important;
+  border-color: var(--color-success-border, rgba(100,220,180,0.45)) !important;
   transform: scale(1.02);
   transition: all 0.12s;
 }
@@ -134,7 +134,7 @@
   font-size: clamp(0.85rem,2.2vw,1.05rem);
   font-weight: 600;
   color: var(--text-primary);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  text-shadow: 0 1px 4px var(--shadow-item-color, rgba(0,0,0,0.35));
   flex-shrink: 0;
   min-width: 85px;
 }
@@ -143,7 +143,7 @@
   color: var(--text-secondary);
   font-family: var(--font-mono);
   word-break: break-all;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  text-shadow: 0 1px 4px var(--shadow-item-color, rgba(0,0,0,0.25));
   font-size: clamp(0.65rem,1.8vw,0.9rem);
 }
 
@@ -175,7 +175,7 @@
   font-size: clamp(1.8rem,5vw,2.6rem);
   font-weight: 500;
   color: var(--text-primary);
-  text-shadow: 0 2px 12px rgba(0,0,0,0.40);
+  text-shadow: 0 2px 12px var(--shadow-card-color, rgba(0,0,0,0.40));
   letter-spacing: 0.06em;
   line-height: 1.2;
 }
@@ -189,7 +189,7 @@
 .status-motto {
   font-size: clamp(0.75rem,2vw,0.9rem);
   color: var(--text-secondary);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  text-shadow: 0 1px 4px var(--shadow-item-color, rgba(0,0,0,0.25));
   min-height: 1.5em;
 }
 
@@ -209,7 +209,7 @@
 .uptime {
   font-size: clamp(0.6rem,1.5vw,0.75rem);
   color: var(--text-muted);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.20);
+  text-shadow: 0 1px 4px var(--shadow-item-color, rgba(0,0,0,0.20));
   font-family: var(--font-mono);
 }
 
@@ -255,18 +255,18 @@
 
 @media print {
   body::before { display: none; }
-  body { padding: 1rem; background: #fff !important; }
-  .card { background: #fff; backdrop-filter: none; border: 1px solid #ccc; box-shadow: none; max-width: 100%; opacity: 1; transform: none; animation: none; }
-  .header { background: #f5f5f5; }
-  .header h1 { background: none; color: #0b2b3b; }
-  .greeting { color: #0b2b3b; text-shadow: none; opacity: 1; animation: none; }
-  .service-item { background: #fafafa; box-shadow: none; border-color: #ddd; opacity: 1; transform: none; animation: none; }
-  .service-name, .service-url { color: #222; text-shadow: none; }
-  .status-box { background: #f5f5f5; border-color: #ddd; opacity: 1; animation: none; }
-  .clock { color: #222; text-shadow: none; }
-  .status-motto { color: #555; }
+  body { padding: 1rem; background: var(--print-bg, #fff) !important; }
+  .card { background: var(--print-bg, #fff); backdrop-filter: none; border: 1px solid var(--print-border, #ccc); box-shadow: none; max-width: 100%; opacity: 1; transform: none; animation: none; }
+  .header { background: var(--print-surface, #f5f5f5); }
+  .header h1 { background: none; color: var(--print-accent, #0b2b3b); }
+  .greeting { color: var(--print-accent, #0b2b3b); text-shadow: none; opacity: 1; animation: none; }
+  .service-item { background: var(--print-surface2, #fafafa); box-shadow: none; border-color: var(--print-border, #ddd); opacity: 1; transform: none; animation: none; }
+  .service-name, .service-url { color: var(--print-body, #222); text-shadow: none; }
+  .status-box { background: var(--print-surface, #f5f5f5); border-color: var(--print-border, #ddd); opacity: 1; animation: none; }
+  .clock { color: var(--print-body, #222); text-shadow: none; }
+  .status-motto { color: var(--print-secondary, #555); }
   .status-motto::after { content: none; }
-  .uptime { color: #888; }
+  .uptime { color: var(--print-muted, #888); }
   #snowCanvas { display: none; }
   #loader { display: none; }
 }
