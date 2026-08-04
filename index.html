@@ -46,32 +46,32 @@
  backdrop-filter:blur(2px); pointer-events:none; z-index:0;
  }
  body > * { position:relative; z-index:1; }
- #snowCanvas {
- position:fixed; inset:0; width:100%; height:100%;
- pointer-events:none; z-index:0; opacity:0;
- transition:opacity 1.5s ease 0.5s;
- }
+  #snowCanvas {
+  position:fixed; inset:0; width:100%; height:100%;
+  pointer-events:none; z-index:0; opacity:0;
+  transition:opacity 1s ease 0.2s;
+  }
  #loader.hidden ~ #snowCanvas { opacity:1; }
- #loader {
- position:fixed; inset:0; z-index:9999;
-  background:var(--bg-gradient-loader-light); background-size:200% 200%;
- animation:loaderBgShift 6s ease infinite; backdrop-filter:blur(6px);
- display:flex; flex-direction:column; align-items:center; justify-content:center;
- transition:opacity 0.5s ease, visibility 0.5s ease, transform 0.5s ease;
- }
+  #loader {
+  position:fixed; inset:0; z-index:9999;
+   background:var(--bg-gradient-loader-light); background-size:200% 200%;
+  animation:loaderBgShift 4s ease infinite; backdrop-filter:blur(6px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:opacity 0.35s ease, visibility 0.35s ease, transform 0.35s ease;
+  }
  @keyframes loaderBgShift { 0%{background-position:0% 0%} 50%{background-position:100% 100%} 100%{background-position:0% 0%} }
  #loader.hidden { opacity:0; visibility:hidden; pointer-events:none; transform:scale(1.05); }
  .loader-crystal { display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
  .crystal-wrapper { position:relative; display:flex; align-items:center; justify-content:center; }
- .crystal-svg { width:90px; height:90px; animation:crystalFloat 4s ease-in-out infinite; filter:drop-shadow(0 0 12px var(--color-accent-glow)); }
- @keyframes crystalFloat { 0%,100%{transform:translateY(0) rotate(0deg)} 25%{transform:translateY(-8px) rotate(3deg)} 75%{transform:translateY(4px) rotate(-2deg)} }
- .crystal-svg .main-line { stroke:var(--color-accent); stroke-dasharray:360; stroke-dashoffset:360; animation:drawCrystal 3.5s ease-in-out infinite alternate; }
- .crystal-svg .inner-line { stroke:var(--loader-stroke-inner); stroke-dasharray:240; stroke-dashoffset:240; animation:drawCrystal 3.5s ease-in-out 0.6s infinite alternate; }
- .crystal-svg .core-line { stroke:var(--color-accent-warm); stroke-dasharray:80; stroke-dashoffset:80; animation:drawCrystal 2.5s ease-in-out 1.2s infinite alternate; }
- @keyframes drawCrystal { 0%{stroke-dashoffset:360} 60%{stroke-dashoffset:0} 100%{stroke-dashoffset:0} }
- .crystal-glow { position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle,var(--color-accent-glow),transparent 70%); animation:glowPulse 3s ease-in-out infinite; }
- @keyframes glowPulse { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.2)} }
- .loader-text-frost { font-family:var(--font-title); font-size:1.3rem; background:linear-gradient(135deg,var(--loader-text-gradient)); background-size:300% 300%; background-clip:text; -webkit-background-clip:text; color:transparent; animation:frostShift 4s ease infinite; }
+  .crystal-svg { width:90px; height:90px; animation:crystalFloat 3s ease-in-out infinite; filter:drop-shadow(0 0 12px var(--color-accent-glow)); }
+  @keyframes crystalFloat { 0%,100%{transform:translateY(0) rotate(0deg)} 25%{transform:translateY(-8px) rotate(3deg)} 75%{transform:translateY(4px) rotate(-2deg)} }
+  .crystal-svg .main-line { stroke:var(--color-accent); stroke-dasharray:360; stroke-dashoffset:360; animation:drawCrystal 2.2s ease-in-out infinite alternate; }
+  .crystal-svg .inner-line { stroke:var(--loader-stroke-inner); stroke-dasharray:240; stroke-dashoffset:240; animation:drawCrystal 2.2s ease-in-out 0.4s infinite alternate; }
+  .crystal-svg .core-line { stroke:var(--color-accent-warm); stroke-dasharray:80; stroke-dashoffset:80; animation:drawCrystal 1.6s ease-in-out 0.8s infinite alternate; }
+  @keyframes drawCrystal { 0%{stroke-dashoffset:360} 60%{stroke-dashoffset:0} 100%{stroke-dashoffset:0} }
+  .crystal-glow { position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle,var(--color-accent-glow),transparent 70%); animation:glowPulse 2.4s ease-in-out infinite; }
+  @keyframes glowPulse { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.2)} }
+  .loader-text-frost { font-family:var(--font-title); font-size:1.3rem; background:linear-gradient(135deg,var(--loader-text-gradient)); background-size:300% 300%; background-clip:text; -webkit-background-clip:text; color:transparent; animation:frostShift 3s ease infinite; }
  @keyframes frostShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
  .loader-dots { display:flex; gap:6px; margin-top:0.2rem; }
  .loader-dots span { width:6px; height:6px; border-radius:50%; background:var(--color-accent); animation:dotBounce 1.2s ease-in-out infinite; }
@@ -87,8 +87,13 @@
  *,*::before,*::after { animation-duration:0.01ms!important; transition-duration:0.01ms!important; }
  #snowCanvas { display:none; }
  }
- .service-item.strike .service-name,
- .service-item.strike .service-url { text-decoration: line-through; }
+  .status-dot {
+  width:0.55rem; height:0.55rem; border-radius:50%; flex-shrink:0;
+  align-self:center; background:var(--text-muted);
+  border:1px solid rgba(255,255,255,0.35);
+  }
+  .status-dot.online { background:var(--status-online); box-shadow:0 0 10px var(--color-success-glow); }
+  .status-dot.offline { background:var(--status-offline); box-shadow:0 0 10px rgba(242,94,94,0.30); }
  .toast {
  position: fixed; bottom: 2rem; left: 50%;
  transform: translateX(-50%) translateY(20px);
@@ -180,29 +185,29 @@
  <div class="content">
  <h2 class="greeting" id="greeting"></h2>
 
- <nav class="service-list" aria-label="服务导航">
- <a href="https://blog.snowblock.top" class="service-item" target="_blank" rel="noopener">
- <span class="service-name">博客</span>
- <span class="service-url">blog.snowblock.top</span>
- </a>
+  <nav class="service-list" aria-label="服务导航">
+  <a href="https://blog.snowblock.top" class="service-item" target="_blank" rel="noopener">
+  <span class="status-dot online" aria-hidden="true"></span>
+  <span class="service-name">博客</span>
+  <span class="service-url">blog.snowblock.top</span>
+  <span class="service-desc">在线</span>
+  </a>
 
- <span class="service-item strike" data-copy="play.snowblock.top" tabindex="0" role="button"
- aria-label="复制 MC 服务器地址 play.snowblock.top">
- <span class="service-name">MC 服务器</span>
- <span class="service-url">play.snowblock.top</span>
- <span class="service-desc">点击复制</span>
- </span>
+  <span class="service-item" data-copy="play.snowblock.top" tabindex="0" role="button"
+  aria-label="复制 MC 服务器地址 play.snowblock.top">
+  <span class="status-dot offline" aria-hidden="true"></span>
+  <span class="service-name">MC 服务器</span>
+  <span class="service-url">play.snowblock.top</span>
+  <span class="service-desc">离线 · 点击复制</span>
+  </span>
 
- <a href="https://status.snowblock.top" class="service-item strike" target="_blank" rel="noopener">
- <span class="service-name">MC 状态监控</span>
- <span class="service-url">status.snowblock.top</span>
- </a>
-
- <a href="http://192.168.2.4:5000" class="service-item strike" target="_blank" rel="noopener">
- <span class="service-name">环境监控</span>
- <span class="service-url">192.168.2.4:5000</span>
- </a>
- </nav>
+  <a href="https://status.snowblock.top" class="service-item" target="_blank" rel="noopener">
+  <span class="status-dot offline" aria-hidden="true"></span>
+  <span class="service-name">MC 状态监控</span>
+  <span class="service-url">status.snowblock.top</span>
+  <span class="service-desc">离线</span>
+  </a>
+  </nav>
 
  <div class="status-box">
  <div class="clock" id="clock">

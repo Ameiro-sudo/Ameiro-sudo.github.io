@@ -17,17 +17,17 @@ var app = (function() {
  img.onerror = function() { loaded = true; checkShowCard(); };
 
  setTimeout(function() {
- minTimePassed = true;
- checkShowCard();
- }, 1500);
+  minTimePassed = true;
+  checkShowCard();
+ }, 800);
 
  var timeout = setTimeout(function() {
- if (!card.classList.contains('visible')) {
- loaded = true;
- minTimePassed = true;
- checkShowCard();
- }
- }, 5000);
+  if (!card.classList.contains('visible')) {
+  loaded = true;
+  minTimePassed = true;
+  checkShowCard();
+  }
+ }, 3000);
 
  function checkShowCard() {
  if (loaded && minTimePassed && !card.classList.contains('visible')) {
