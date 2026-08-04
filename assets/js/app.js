@@ -3,7 +3,9 @@ var app = (function() {
 
  var config = {
  cdnBase: 'assets/vendor/images/',
- bgImage: 'assets/vendor/images/bg.webp'
+ bgImage: (window.matchMedia('(orientation: portrait)').matches
+  ? 'assets/vendor/images/bg-portrait.webp'
+  : 'assets/vendor/images/bg.webp')
  };
 
  var loader = document.getElementById('loader');
