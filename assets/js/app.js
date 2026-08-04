@@ -139,23 +139,42 @@ var app = (function() {
  document.body.removeChild(ta);
  }
 
- document.querySelectorAll('[data-copy]').forEach(function(el) {
- el.addEventListener('click', function(e) {
- e.stopPropagation();
- var t = el.getAttribute('data-copy');
- if (t) {
- copyText(t);
- el.classList.add('copied');
- setTimeout(function() { el.classList.remove('copied'); }, 300);
- }
- });
- el.addEventListener('keydown', function(e) {
- if (e.key === 'Enter' || e.key === ' ') {
- e.preventDefault();
- el.click();
- }
- });
- });
+  document.querySelectorAll('[data-copy]').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+  e.stopPropagation();
+  var t = el.getAttribute('data-copy');
+  if (t) {
+  copyText(t);
+  el.classList.add('copied');
+  setTimeout(function() { el.classList.remove('copied'); }, 300);
+  }
+  });
+  el.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+  e.preventDefault();
+  el.click();
+  }
+  });
+  });
+
+  function checkStatus(url, el) {
+  if (!url || !el) return;
+  var dot = el.querySelector('.status-dot');
+  var desc = el.querySelector('.service-desc');
+  var controller = new AbortController();
+  var timer = setTimeout(function() { controller.abort(); }, 5000);
+  fetch(url, { mode: 'no-cors', cache: 'no-store', signal: controller.signal })
+  .then(function() {
+  clearTimeout(timer);
+  if (dot) dot.className = 'status-dot online';
+  if (desc) desc.textContent = '在线';
+  })
+  .catch(function() { clearTimeout(timer); });
+  }
+
+  document.querySelectorAll('[data-check]').forEach(function(el) {
+  checkStatus(el.getAttribute('data-check'), el);
+  });
 
  var greetingEl = document.getElementById('greeting');
  if (greetingEl) {
