@@ -178,6 +178,46 @@ var app = (function() {
   checkStatus(el.getAttribute('data-check'), el);
   });
 
+  /* ===== MC 服务器真实探测 (api.mcstatus.io) ===== */
+  function checkMcStatus(address, el) {
+  if (!address || !el) return;
+  var dot = el.querySelector('.status-dot');
+  var desc = el.querySelector('.service-desc');
+  var controller = new AbortController();
+  var timer = setTimeout(function() { controller.abort(); }, 8000);
+  fetch('https://api.mcstatus.io/v2/status/java/' + encodeURIComponent(address), { cache: 'no-store', signal: controller.signal })
+  .then(function(r) {
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+  })
+  .then(function(d) {
+  clearTimeout(timer);
+  if (d && d.online) {
+  var players = (d.players && d.players.online != null) ? d.players.online : '?';
+  var max = (d.players && d.players.max != null) ? d.players.max : '?';
+  if (dot) dot.className = 'status-dot online';
+  if (desc) desc.textContent = '在线 ' + players + ' / ' + max + ' · 点击复制';
+  } else {
+  if (dot) dot.className = 'status-dot offline';
+  if (desc) desc.textContent = '离线 · 点击复制';
+  }
+  })
+  .catch(function() {
+  clearTimeout(timer);
+  if (dot) dot.className = 'status-dot offline';
+  if (desc) desc.textContent = '离线 · 点击复制';
+  });
+  }
+
+  document.querySelectorAll('[data-mc-address]').forEach(function(el) {
+  checkMcStatus(el.getAttribute('data-mc-address'), el);
+  });
+  setInterval(function() {
+  document.querySelectorAll('[data-mc-address]').forEach(function(el) {
+  checkMcStatus(el.getAttribute('data-mc-address'), el);
+  });
+  }, 60 * 1000);
+
  var greetingEl = document.getElementById('greeting');
  if (greetingEl) {
  var hour = new Date().getHours();
