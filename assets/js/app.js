@@ -258,20 +258,24 @@ var app = (function() {
   if (isBusy) return;
   isBusy = true;
 
+  /* 一言已本地化：读取站内语料 assets/vendor/hitokoto.json，不再请求 v1.hitokoto.cn */
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://v1.hitokoto.cn', true);
+  xhr.open('GET', 'assets/vendor/hitokoto.json', true);
   xhr.timeout = 4000;
 
   xhr.onload = function() {
   isBusy = false;
   if (xhr.status === 200) {
   try {
-  var data = JSON.parse(xhr.responseText);
+  var list = JSON.parse(xhr.responseText);
+  if (list && list.length) {
+  var data = list[Math.floor(Math.random() * list.length)];
   if (data && data.hitokoto) {
   mottoText = data.hitokoto;
   mottoFrom = data.from ? ' ——' + data.from : '';
   startTyping();
   return;
+  }
   }
   } catch(e) {}
   }
