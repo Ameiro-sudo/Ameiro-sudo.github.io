@@ -148,7 +148,7 @@
 }
 
 .service-desc {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   white-space: nowrap;
 }
@@ -207,7 +207,7 @@
 }
 
 .uptime {
-  font-size: clamp(0.6rem,1.5vw,0.75rem);
+  font-size: clamp(0.75rem,1.5vw,0.85rem);
   color: var(--text-muted);
   text-shadow: 0 1px 4px var(--shadow-item-color, rgba(0,0,0,0.20));
   font-family: var(--font-mono);
@@ -240,14 +240,14 @@
   .card { border-radius: 1.8rem; }
   .header { padding: 1.1rem 1.1rem 0.9rem; }
   .header h1 { font-size: 1.3rem; }
-  .header .domain { font-size: 0.65rem; }
+  .header .domain { font-size: 0.75rem; }
   .content { padding: 1rem 1.1rem; }
   .greeting { font-size: 0.85rem; margin-bottom: 0.8rem; padding-left: 0.7rem; border-left-width: 3px; }
   .service-list { gap: 0.5rem; margin: 0.8rem 0; }
   .service-item { padding: 0.55rem 0.75rem; border-radius: 0.9rem; gap: 0.15rem 0.3rem; }
   .service-name { min-width: 65px; font-size: 0.8rem; }
-  .service-url { font-size: 0.6rem; }
-  .service-desc { font-size: 0.5rem; }
+  .service-url { font-size: 0.75rem; }
+  .service-desc { font-size: 0.72rem; }
   .status-box { padding: 0.6rem 0.8rem; gap: 0.3rem; }
   .crystal-svg { width: 60px; height: 60px; }
   .loader-text-frost { font-size: 1rem; }

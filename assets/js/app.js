@@ -10,30 +10,17 @@ var app = (function() {
 
  var loader = document.getElementById('loader');
  var card = document.getElementById('mainCard');
- var loaded = false;
  var minTimePassed = false;
 
- var img = new Image();
- img.src = config.bgImage;
- img.onload = function() { loaded = true; checkShowCard(); };
- img.onerror = function() { loaded = true; checkShowCard(); };
 
  setTimeout(function() {
   minTimePassed = true;
   checkShowCard();
  }, 800);
 
- var timeout = setTimeout(function() {
-  if (!card.classList.contains('visible')) {
-  loaded = true;
-  minTimePassed = true;
-  checkShowCard();
-  }
- }, 3000);
 
  function checkShowCard() {
- if (loaded && minTimePassed && !card.classList.contains('visible')) {
- clearTimeout(timeout);
+ if (minTimePassed && !card.classList.contains('visible')) {
  loader.classList.add('hidden');
  document.body.classList.add('bg-loaded');
  card.classList.remove('loading');

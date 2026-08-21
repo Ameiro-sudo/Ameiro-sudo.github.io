@@ -4,15 +4,17 @@
   /* 最深背景色（body 底色） */
   --color-accent: #5b9bb5;
   /* 主色调（蓝灰，用于链接/图标/强调） */
+  --heading-accent: #2f6a84;
+  /* 页面标题色（深蓝，保证浅色背景对比度） */
   --color-accent-warm: #d4a86a;
   /* 暖色强调（金褐色，用于水晶核心/点缀） */
   --color-accent-glow: rgba(91, 155, 181, 0.15);
   /* 主色发光遮罩 */
-  --text-primary: #1a2b3c;
+  --text-primary: #16242f;
   /* 正文主色 */
-  --text-secondary: #4a5b6c;
+  --text-secondary: #3c4c5c;
   /* 次要文字（描述/元信息） */
-  --text-muted: #7a8a9c;
+  --text-muted: #4d5b6b;
   /* 弱化文字（时间戳/无内容提示） */
   --color-success: #4caf50;
   /* 成功/在线（绿色，备用值） */
@@ -24,13 +26,13 @@
   /* 高亮标记（文章搜索/选中） */
 
   /* ===== 毛玻璃系统 ===== */
-  --glass-bg: rgba(255, 255, 255, 0.60);
+  --glass-bg: rgba(255, 255, 255, 0.65);
   /* 毛玻璃卡片默认背景 */
-  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.50);
   /* 毛玻璃边框 */
-  --glass-hover-bg: rgba(255, 255, 255, 0.85);
+  --glass-hover-bg: rgba(255, 255, 255, 0.75);
   /* 毛玻璃悬浮态背景 */
-  --glass-header-bg: rgba(242, 239, 233, 0.80);
+  --glass-header-bg: rgba(255, 255, 255, 0.65);
   /* 顶栏毛玻璃背景 */
 
   /* ===== 阴影系统 ===== */
@@ -56,12 +58,14 @@
   /* 小元素圆角 */
 
   /* ===== 字体系统 ===== */
-  --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'Microsoft YaHei', 'PingFang SC', monospace;
   /* 等宽字体栈 */
-  --font-sans: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, -apple-system, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', sans-serif;
   /* 无衬线字体栈 */
   --font-title: 'ZCOOL KuaiLe', cursive, var(--font-sans);
   /* 标题装饰字体 */
+  --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', serif;
+  /* 衬线标题字体 */
 
   /* ===== 布局 ===== */
   --body-pad: clamp(1.2rem, 5.88vw, 2.5rem);
@@ -81,15 +85,31 @@
   --heatmap-l4: rgba(91, 155, 181, 0.80);
   /* 高活跃度 */
 
+  /* ===== 动效系统 ===== */
+  --motion-enter: fadeSlideUp 0.3s ease both;
+  /* 通用入场动画（淡入上移，多数视图/卡片） */
+  --motion-enter-slow: fadeSlideUp 0.35s ease 0.05s both;
+  /* 慢速入场（简介卡等带延迟） */
+  --motion-photo: photoIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  /* 照片/相册卡片入场（放大淡入） */
+  --motion-photo-fast: photoIn 0.35s ease both;
+  /* 相册详情照片入场（较快） */
+  --motion-stagger: 0.06s;
+  /* 列表/瀑布流逐项错峰间隔 */
+  --motion-stagger-max: 0.8s;
+  /* 错峰上限 */
+  --transition-theme: 0.35s ease;
+  /* 主题（深浅色）切换过渡时长/缓动 */
+
   /* ===== 背景渐变 ===== */
   --bg-gradient-body-light: linear-gradient(160deg, #f8f6f0, #eef2f5);
   /* 亮色模式 body 渐变 */
   --bg-gradient-body-dark: linear-gradient(160deg, #173b52, #0b2b3b, #0a2433);
-  /* 暗色模式 body 渐变（与 --color-bg-deep 深蓝一致） */
-  --bg-gradient-loader-light: linear-gradient(135deg, #f8f6f0, #eef2f5);
-  /* 亮色模式加载页渐变 */
+  /* 暗色模式 body 渐变（深蓝） */
+  --bg-gradient-loader-light: linear-gradient(135deg, #e9f2f7, #d6e6ef, #e9f2f7);
+  /* 亮色模式加载页渐变（柔和雾蓝） */
   --bg-gradient-loader-dark: linear-gradient(135deg, #0f3a52, #0b2b3b, #0f3a52);
-  /* 暗色模式加载页渐变 */
+  /* 暗色模式加载页渐变（深蓝） */
 
   /* ===== Toast 通知 ===== */
   --toast-bg: rgba(0, 0, 0, 0.65);
@@ -154,20 +174,20 @@
   /* 蓝色状态 */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg-deep: #0b2b3b;
+html.dark {
+  --color-bg-deep: #0b2b3b;
     --color-accent: #8fd8ef;
+    --heading-accent: #8fd8ef;
     --color-accent-warm: #e8c98a;
     --color-accent-glow: rgba(143, 216, 239, 0.15);
     --text-primary: #ffffff;
-    --text-secondary: rgba(220, 240, 255, 0.85);
-    --text-muted: rgba(200, 235, 250, 0.60);
+    --text-secondary: rgba(230, 245, 255, 0.92);
+    --text-muted: rgba(205, 235, 250, 0.70);
 
-    --glass-bg: rgba(255, 255, 255, 0.12);
-    --glass-border: rgba(255, 255, 255, 0.20);
-    --glass-hover-bg: rgba(255, 255, 255, 0.22);
-    --glass-header-bg: rgba(11, 43, 59, 0.55);
+    --glass-bg: rgba(30, 41, 59, 0.70);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --glass-hover-bg: rgba(71, 85, 105, 0.75);
+    --glass-header-bg: rgba(30, 41, 59, 0.50);
 
     --shadow-card: 0 30px 60px -16px rgba(0, 0, 0, 0.45);
     --shadow-card-color: rgba(0, 0, 0, 0.45);
@@ -187,7 +207,6 @@
     --lightbox-close-bg: rgba(255, 255, 255, 0.08);
     --lightbox-close-border: rgba(255, 255, 255, 0.10);
     --lightbox-close-color: rgba(255, 255, 255, 0.6);
-    --lightbox-close-hover-bg: rgba(255, 255, 255, 0.15);
+        --lightbox-close-hover-bg: rgba(255, 255, 255, 0.15);
     --lightbox-close-hover-color: #fff;
-  }
 }
