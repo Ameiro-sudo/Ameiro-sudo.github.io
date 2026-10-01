@@ -60,7 +60,7 @@
  }
  body.bg-loaded { background: var(--color-bg-deep); }
  body::before {
- content:''; position:fixed; inset:0; background:var(--body-overlay);
+ content:''; position:fixed; inset:0; background:var(--bg-scrim);
  backdrop-filter:blur(2px); pointer-events:none; z-index:0;
  }
  body > * { position:relative; z-index:1; }
@@ -96,14 +96,16 @@
  .loader-dots span:nth-child(2) { animation-delay:0.2s; }
  .loader-dots span:nth-child(3) { animation-delay:0.4s; }
  @keyframes dotBounce { 0%,100%{transform:translateY(0);opacity:0.3} 50%{transform:translateY(-8px);opacity:1} }
- @media (prefers-color-scheme: dark) {
-  body { background: var(--bg-gradient-body-dark); }
-  body::after { background: url(assets/vendor/images/bg-portrait.webp) center/cover no-repeat, var(--bg-gradient-body-dark); }
-  body::before { background: var(--body-overlay); backdrop-filter:blur(2px); }
-  #loader { background: var(--bg-gradient-loader-dark); background-size:200% 200%; }
- }
- @media (prefers-color-scheme: dark) and (orientation: landscape) {
-  body::after { background-image: url(assets/vendor/images/bg.webp); }
+ /* 深色背景挂在 html.dark 上，与本文件顶部的 localStorage 主题脚本同源。
+    此前挂在 @media (prefers-color-scheme: dark) 上，两者不同源：系统浅色 +
+    localStorage 里存过 dark 时，卡片是深色而背景仍是浅色。同仓 404.html
+    与状态站 style.css 早已改用 html.dark，这里是最后一个例外。 */
+ html.dark { color-scheme: dark; }
+ html.dark body { background: var(--bg-gradient-body-dark); }
+ html.dark body::after { background: url(assets/vendor/images/bg-portrait.webp) center/cover no-repeat, var(--bg-gradient-body-dark); }
+ html.dark #loader { background: var(--bg-gradient-loader-dark); background-size:200% 200%; }
+ @media (orientation: landscape) {
+  html.dark body::after { background-image: url(assets/vendor/images/bg.webp); }
  }
  @media (prefers-reduced-motion: reduce) {
  *,*::before,*::after { animation-duration:0.01ms!important; transition-duration:0.01ms!important; }
