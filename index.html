@@ -128,12 +128,15 @@
   border: 1px solid var(--toast-border, rgba(255,255,255,0.10));
  box-shadow: var(--shadow-toast);
  opacity: 0; pointer-events: none;
- transition: opacity 0.3s, transform 0.3s;
+ /* 与 assets/css/toast.css 同一套节奏：进场 ease-out、退场 ease-in。
+    这份是内联副本，且后加载会盖掉那边，两份必须一起改。 */
+ transition: opacity var(--dur-fast) var(--ease-in), transform var(--dur-fast) var(--ease-in);
  z-index: 999;
  }
  .toast.show {
  opacity: 1; pointer-events: auto;
  transform: translateX(-50%) translateY(0);
+ transition: opacity var(--dur-normal) var(--ease-out), transform var(--dur-normal) var(--ease-out);
  }
  @media print {
  body::before { display:none; }

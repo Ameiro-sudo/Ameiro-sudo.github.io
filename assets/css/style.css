@@ -12,7 +12,7 @@
   overflow: hidden;
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
 }
 
 .card.visible {
@@ -64,8 +64,9 @@
   border-left: 4px solid var(--color-accent);
   padding-left: 0.9rem;
   margin-bottom: 1rem;
-  opacity: 0;
-  animation: fadeSlide 0.4s ease 0.15s forwards;
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeSlideUp var(--dur-normal) var(--ease-out) 0.06s backwards;
 }
 
 .service-list {
@@ -90,20 +91,28 @@
   text-decoration: none;
   color: inherit;
   outline-offset: 2px;
-  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+  /* background 是简写：会把 background-image / position 一起挂上过渡，
+     而这几个在多数浏览器里不可插值，结果是这条声明整条被忽略——
+     表现就是「hover 背景不渐变，直接跳」。写 background-color。 */
+  transition: background-color var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
   cursor: default;
-  opacity: 0;
-  transform: translateX(-12px);
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.service-item:nth-child(1) { animation: fadeSlide 0.3s ease 0.25s forwards; }
-.service-item:nth-child(2) { animation: fadeSlide 0.3s ease 0.35s forwards; }
-.service-item:nth-child(3) { animation: fadeSlide 0.3s ease 0.45s forwards; }
-.service-item:nth-child(4) { animation: fadeSlide 0.3s ease 0.55s forwards; }
+/* 入场用 backwards 而不是 forwards：forwards 会把最后一帧的 transform 一直
+   钉在元素上，而动画值在层叠里压过普通作者声明——:hover 的位移和 .copied 的
+   缩放就都被吃掉了，鼠标划过去卡片纹丝不动。这里让基础规则自己扛静止态，
+   动画只负责「延迟期间先别出现」。 */
+.service-item:nth-child(1) { animation: fadeSlideUp var(--dur-normal) var(--ease-out) 0.12s backwards; }
+.service-item:nth-child(2) { animation: fadeSlideUp var(--dur-normal) var(--ease-out) 0.18s backwards; }
+.service-item:nth-child(3) { animation: fadeSlideUp var(--dur-normal) var(--ease-out) 0.24s backwards; }
+.service-item:nth-child(4) { animation: fadeSlideUp var(--dur-normal) var(--ease-out) 0.30s backwards; }
 
-@keyframes fadeSlide {
-  0%   { opacity: 0; transform: translateX(-12px); }
-  100% { opacity: 1; transform: translateX(0); }
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(10px); }
 }
 
 .service-item[href] { cursor: pointer; }
@@ -111,9 +120,9 @@
 
 @media (hover: hover) {
   .service-item:hover {
-    background: var(--glass-hover-bg);
+    background-color: var(--glass-hover-bg);
     backdrop-filter: blur(12px) saturate(1.4);
-    transform: translateX(4px) scale(1.01);
+    transform: translateY(-2px) scale(1.01);
     box-shadow: var(--shadow-card);
   }
 }
@@ -124,10 +133,12 @@
 }
 
 .service-item.copied {
-  background: var(--color-success-glow, rgba(100,220,180,0.25)) !important;
+  background-color: var(--color-success-glow, rgba(100,220,180,0.25)) !important;
   border-color: var(--color-success-border, rgba(100,220,180,0.45)) !important;
   transform: scale(1.02);
-  transition: all 0.12s;
+  /* 原来这里写 transition: all 0.12s，把基础规则那三条 transition 顶掉了。
+     .copied 300ms 后被摘掉，那一瞬间节奏从 120ms 跳回 250ms——绿底褪得比
+     按下去时慢一倍，看着像顿了一下。反馈快慢该由基础规则统一给。 */
 }
 
 .service-name {
@@ -166,8 +177,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  opacity: 0;
-  animation: fadeSlide 0.4s ease 0.6s forwards;
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeSlideUp var(--dur-normal) var(--ease-out) 0.36s backwards;
 }
 
 .clock {
