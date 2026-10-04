@@ -44,10 +44,26 @@ jobs:
           echo "服务未在 20s 内就绪" >&2
           exit 1
 
+      # --load-delay 1500：默认是 0，load 事件一触发就扫。这个站首屏要下两张背景图
+      # （bg.webp 145KB、bg-portrait.webp 149KB）与三套字体，扫得太早等于量一个
+      # 还没成型的页面。在 blog 与 win11-replica 上都踩过：CI 报的违规数与本地
+      # 对不上，改动到位之后条数却纹丝不动 —— 那是量错了对象，不是页面有问题。
+      #
+      # --save axe-report + 下面上传 artifact：文本报告只给「哪条规则、哪些选择器」，
+      # 不给前景色/背景色/实际比值。红的时候靠猜太费时间。
       - name: axe 扫描（0 违规才继续）
-        run: npx --yes @axe-core/cli@latest --exit \
-          http://127.0.0.1:8081/index.html \
-          http://127.0.0.1:8081/404.html
+        run: |
+          npx --yes @axe-core/cli@latest --exit --load-delay 1500 --save axe-report \
+            http://127.0.0.1:8081/index.html \
+            http://127.0.0.1:8081/404.html
+
+      - name: 上传 axe 报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axe-report
+          path: axe-report
+          if-no-files-found: ignore
 
   build:
     runs-on: ubuntu-latest
