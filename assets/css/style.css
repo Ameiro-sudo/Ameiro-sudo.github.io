@@ -137,7 +137,7 @@
   border-color: var(--color-success-border, rgba(100,220,180,0.45)) !important;
   transform: scale(1.02);
   /* 原来这里写 transition: all 0.12s，把基础规则那三条 transition 顶掉了。
-     .copied 300ms 后被摘掉，那一瞬间节奏从 120ms 跳回 250ms——绿底褪得比
+     .copied 300ms 后被摘掉，那一瞬间节奏从 120ms 跳回 --dur-fast（现为 100ms）——绿底褪得比
      按下去时慢一倍，看着像顿了一下。反馈快慢该由基础规则统一给。 */
 }
 
