@@ -41,6 +41,11 @@
 
  <link rel="stylesheet" href="assets/css/tokens.css">
  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- toast.css 放在 style.css 之后：它靠层叠盖过 style.css 里的同名规则。
+       以前这里是内联了一份 .toast 的副本，于是同一套样式有两个本体，注释里
+       明写「两份必须一起改」——而真正生效的是后加载的那份。哪份被改都不会
+       立刻见效，很容易让人以为改错了地方。现在只有这一个本体。 -->
+  <link rel="stylesheet" href="assets/css/toast.css">
 
  <style>
  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -118,26 +123,9 @@
   }
   .status-dot.online { background:var(--status-online); box-shadow:0 0 10px var(--color-success-glow); }
   .status-dot.offline { background:var(--status-offline); box-shadow:0 0 10px rgba(242,94,94,0.30); }
- .toast {
- position: fixed; bottom: 2rem; left: 50%;
- transform: translateX(-50%) translateY(20px);
-  background: var(--toast-bg, rgba(0,0,0,0.65)); backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); color: var(--toast-text, #fff);
- padding: 0.7rem 1.6rem; border-radius: 2rem;
- font-size: 0.9rem; font-weight: 500;
-  border: 1px solid var(--toast-border, rgba(255,255,255,0.10));
- box-shadow: var(--shadow-toast);
- opacity: 0; pointer-events: none;
- /* 与 assets/css/toast.css 同一套节奏：进场 ease-out、退场 ease-in。
-    这份是内联副本，且后加载会盖掉那边，两份必须一起改。 */
- transition: opacity var(--dur-fast) var(--ease-in), transform var(--dur-fast) var(--ease-in);
- z-index: 999;
- }
- .toast.show {
- opacity: 1; pointer-events: auto;
- transform: translateX(-50%) translateY(0);
- transition: opacity var(--dur-normal) var(--ease-out), transform var(--dur-normal) var(--ease-out);
- }
+/* .toast 的样式搬到了 assets/css/toast.css —— 原来这里是内联副本，而真正
+   生效的是后加载的那份，注释里还写着「两份必须一起改」。规则本体躺在没人
+   加载的 CSS 里、页面跑的是另一份，改哪边都不立刻见效。现在只有一个本体。 */
  @media print {
  body::before { display:none; }
  body { background:#fff!important; padding:1rem; color:#000; }
