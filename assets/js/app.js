@@ -146,24 +146,18 @@ var app = (function() {
   });
   });
 
-  function checkStatus(url, el) {
-  if (!url || !el) return;
-  var dot = el.querySelector('.status-dot');
-  var desc = el.querySelector('.service-desc');
-  var controller = new AbortController();
-  var timer = setTimeout(function() { controller.abort(); }, 5000);
-  fetch(url, { mode: 'no-cors', cache: 'no-store', signal: controller.signal })
-  .then(function() {
-  clearTimeout(timer);
-  if (dot) dot.className = 'status-dot online';
-  if (desc) desc.textContent = '在线';
-  })
-  .catch(function() { clearTimeout(timer); });
-  }
-
-  document.querySelectorAll('[data-check]').forEach(function(el) {
-  checkStatus(el.getAttribute('data-check'), el);
-  });
+  /* 这里原来有一个 checkStatus()，给博客和状态站两个链接打「在线/离线」灯。
+   * 它结构上做不到它声称的事：mode:'no-cors' 下只要服务端**返回了任何** HTTP
+   * 响应——包括 Cloudflare 的 502、404、跳登录页——fetch 的 promise 都会 resolve，
+   * 于是 .then 无条件把灯点绿。只有网络层失败（DNS 解析不了 / 连接被拒 / 5 秒
+   * 超时 abort）才会 reject，而 reject 分支当时只 clearTimeout，不改 DOM。
+   * 结果就是：博客那项初始就是绿的，永远绿；状态站那项只要 Cloudflare 回一个
+   * 502 页面就显示「在线」。
+   *
+   * 跨域拿不到 HTTP 状态码是浏览器的硬限制，不是实现没写好。与其留一个假装
+   * 实时的功能，不如删掉——下面 index.html 里这两项现在只当普通导航链接，
+   * 不再声明任何状态。真正能读出状态的 MC 探测留在 checkMcStatus()。
+   */
 
   /* ===== MC 服务器真实探测 (api.mcstatus.io) ===== */
   function checkMcStatus(address, el) {

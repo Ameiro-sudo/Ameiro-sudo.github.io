@@ -213,26 +213,26 @@
  <h2 class="greeting" id="greeting"></h2>
 
   <nav class="service-list" aria-label="服务导航">
-  <a href="https://blog.snowblock.top" class="service-item" target="_blank" rel="noopener" data-check="https://blog.snowblock.top">
-  <span class="status-dot online" aria-hidden="true"></span>
+  <a href="https://blog.snowblock.top" class="service-item" target="_blank" rel="noopener">
   <span class="service-name">博客</span>
   <span class="service-url">blog.snowblock.top</span>
-  <span class="service-desc">在线</span>
   </a>
 
+  <!-- 状态只写在 .service-desc 这一个节点里，aria-describedby 指向它，
+       视觉和读屏因此读到同一份字符串。原来状态被重复写进 aria-label，
+       而 checkMcStatus() 只更新 .service-desc、不碰 aria-label ——
+       服务器在线时读屏仍然念「离线」。 -->
   <span class="service-item" data-copy="play.snowblock.top" data-mc-address="play.snowblock.top" tabindex="0" role="button"
-  aria-label="MC 服务器 play.snowblock.top 离线 · 点击复制地址">
-  <span class="status-dot offline" aria-hidden="true"></span>
+  aria-label="MC 服务器 play.snowblock.top · 点击复制地址" aria-describedby="mcStatusDesc">
+  <span class="status-dot" aria-hidden="true"></span>
   <span class="service-name">MC 服务器</span>
   <span class="service-url">play.snowblock.top</span>
-  <span class="service-desc">离线 · 点击复制</span>
+  <span class="service-desc" id="mcStatusDesc">检测中…</span>
   </span>
 
-  <a href="https://status.snowblock.top" class="service-item" target="_blank" rel="noopener" data-check="https://status.snowblock.top">
-  <span class="status-dot offline" aria-hidden="true"></span>
+  <a href="https://status.snowblock.top" class="service-item" target="_blank" rel="noopener">
   <span class="service-name">MC 状态监控</span>
   <span class="service-url">status.snowblock.top</span>
-  <span class="service-desc">离线</span>
   </a>
   </nav>
 
