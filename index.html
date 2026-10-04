@@ -3,6 +3,35 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 内容安全策略。
+       本站没有构建步骤、没有框架、全部资源都在自己域下，所以这份策略可以写得很紧：
+       默认只认自己，只有 connect-src 放开那个查 MC 状态的 API。
+       之前完全没有 CSP —— 任何一次被注入的内容都能直接执行，而这是个零构建的
+       静态站，注入进来的代码没有任何东西会拦。
+
+       'unsafe-inline' 两处都是**已知且必要**的：
+         script-src：紧接着下面那段防暗色闪烁的脚本必须在 <head> 里同步执行，
+                    否则首帧已经画完才决定主题。要去掉它得先把它变成外部文件，
+                    而那恰恰会引入它本来要避免的闪烁。
+         style-src：页面里还有一段内联 <style>（加载层的不透明底色，
+                    用来杜绝无样式界面闪现）。
+       两处都能换成 hash 或 nonce，但代价是每次改脚本都要同步改策略值——
+       对这个体量不划算。留着并写在这里，好过不留。 -->
+  <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline';
+      style-src 'self' 'unsafe-inline';
+      font-src 'self';
+      img-src 'self' data:;
+      connect-src 'self' https://api.mcstatus.io;
+      base-uri 'none';
+      form-action 'none';
+      object-src 'none'">
+       frame-ancestors 写在这里是**无效**的：它只能走 HTTP 响应头，而这里是
+       <meta>——浏览器照常解析然后打一条 console 警告（"directive 'frame-ancestors'
+       is ignored when delivered via a <meta> element"），每页一次。所以不写它：
+       一条每页刷屏的警告换不来任何防护。要防点击劫持得让服务器发 X-Frame-Options，
+       而 GitHub Pages 不给这个口子。
  <title>SnowBlock · 个人导航</title>
  <meta name="description" content="SnowBlock 个人导航页 — 博客、MC 服务器、状态监控、主机监控一站式">
  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2efe9">
