@@ -148,8 +148,13 @@
 </head>
 <body>
 
-<!-- ===== 加载层 ===== -->
-<div id="loader">
+<!-- ===== 加载层 =====
+     aria-hidden：这是一层几百毫秒后就撤掉的闪屏，不是页面内容。它那句
+     「正在连接雪境」此刻正被读屏念到的话，等它念完，用户已经落到真正的正文上
+     了，而正文在 <main> 里、会被完整播报。不标 aria-hidden 的话，
+     axe 的 region 规则还会判「有内容不在任何 landmark 里」——这是本页唯一
+     一条 a11y 违规，来源就是这个闪屏。 -->
+<div id="loader" aria-hidden="true">
  <div class="loader-crystal">
  <div class="crystal-wrapper">
  <div class="crystal-glow"></div>
