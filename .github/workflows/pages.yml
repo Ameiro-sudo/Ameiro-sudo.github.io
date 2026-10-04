@@ -1,5 +1,9 @@
 name: pages build and deployment
 
+# 这个仓库的 git log 里 fix(a11y) / fix(motion) / fix(ui) 反复出现，每一轮都是
+# 人肉点出来、人肉改完、人肉确认。修完没有闸门，所以必然回归——MC 状态项的
+# aria-label 硬编码「离线」就是这么进来的。下面这个 job 就是那道闸门。
+
 on:
   push:
     branches: ["main"]
@@ -15,8 +19,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # axe 必须对着一个真的 HTTP origin 扫，本地文件路径模式下它会去请求
+      # 自己的服务器并拿回一张错误页，于是报出来的违规全是那张页面的
+      # （实测：扫 index.html 报「没有 main landmark」+「#main-content 不在
+      # landmark 里」，而本文件的 <main> 明明就在那儿）。所以先起个静态服务。
+      - name: 起本地服务
+        run: |
+          python3 -m http.server 8081 --bind 127.0.0.1 &
+          for i in $(seq 1 40); do
+            if curl -sf http://127.0.0.1:8081/index.html -o /dev/null; then echo ready; exit 0; fi
+            sleep 0.5
+          done
+          echo "服务未在 20s 内就绪" >&2
+          exit 1
+
+      - name: axe 扫描（0 违规才继续）
+        run: npx --yes @axe-core/cli@latest --exit \
+          http://127.0.0.1:8081/index.html \
+          http://127.0.0.1:8081/404.html
+
   build:
     runs-on: ubuntu-latest
+    needs: a11y
     steps:
       - name: Checkout
         uses: actions/checkout@v4
