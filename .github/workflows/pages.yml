@@ -138,6 +138,9 @@ jobs:
           cp CNAME robots.txt sitemap.xml favicon.ico sw.js _site/
           cp ./*.html _site/
           cp -r ./assets _site/assets
+          # logo.svg 是品牌源文件：本仓的 HTML/CSS/JS 和另外两站都没有引用它
+          # （同目录的 favicon.ico / favicon.svg / apple-touch-icon.png / og-image.png 都有）。
+          rm _site/assets/brand/logo.svg
           echo "将发布："; find _site -maxdepth 1 | sort
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
