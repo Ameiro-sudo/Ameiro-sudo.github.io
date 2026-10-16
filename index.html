@@ -216,14 +216,13 @@
   <span class="service-url">blog.snowblock.top</span>
   </a>
 
-  <!-- 状态只写在 .service-desc 这一个节点里，aria-describedby 指向它：
-     视觉与读屏因此读到同一份字符。-->
-  <span class="service-item" data-copy="play.snowblock.top" data-mc-address="play.snowblock.top" tabindex="0" role="button"
-  aria-label="MC 服务器 play.snowblock.top · 点击复制地址" aria-describedby="mcStatusDesc">
+  <!-- 不要给它加 aria-label：可见文字里有一半是 JS 写的状态，2.5.3 要求屏读名称
+     涵盖可见文字。名称取自内容，两边就不会分叉。-->
+  <span class="service-item" data-copy="play.snowblock.top" data-mc-address="play.snowblock.top" tabindex="0" role="button">
   <span class="status-dot" aria-hidden="true"></span>
   <span class="service-name">MC 服务器</span>
   <span class="service-url">play.snowblock.top</span>
-  <span class="service-desc" id="mcStatusDesc">检测中…</span>
+  <span class="service-desc">检测中…</span>
   </span>
 
   <a href="https://status.snowblock.top" class="service-item" target="_blank" rel="noopener">
