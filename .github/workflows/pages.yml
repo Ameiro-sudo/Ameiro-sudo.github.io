@@ -126,10 +126,23 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      # 白名单，而不是 `.`。原来发布整个仓库，于是 scripts/ 与 THIRD-PARTY.md 也在
+      # 公网可读（实测 /scripts/check-page-invariants.mjs 返回 200，而页面上没有任何
+      # 地方引用它）。站内引用过的只有 assets/、根目录的 *.html、以及 sw.js
+      # （app.js:345 注册的那个）——少一个就是白屏或图标全丢。
+      # 先落到一个目录再上传：upload-pages-artifact 的多行 path 会被当成一个文件名
+      # 传给 tar。
+      - name: 收集要发布的文件
+        run: |
+          mkdir -p _site
+          cp CNAME robots.txt sitemap.xml favicon.ico sw.js _site/
+          cp ./*.html _site/
+          cp -r ./assets _site/assets
+          echo "将发布："; find _site -maxdepth 1 | sort
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
   deploy:
     environment:
       name: github-pages
