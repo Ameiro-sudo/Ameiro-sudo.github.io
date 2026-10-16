@@ -3,20 +3,9 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 内容安全策略。
-       本站没有构建步骤、没有框架、全部资源都在自己域下，所以这份策略可以写得很紧：
-       默认只认自己，只有 connect-src 放开那个查 MC 状态的 API。
-       之前完全没有 CSP —— 任何一次被注入的内容都能直接执行，而这是个零构建的
-       静态站，注入进来的代码没有任何东西会拦。
-
-       'unsafe-inline' 两处都是**已知且必要**的：
-         script-src：紧接着下面那段防暗色闪烁的脚本必须在 <head> 里同步执行，
-                    否则首帧已经画完才决定主题。要去掉它得先把它变成外部文件，
-                    而那恰恰会引入它本来要避免的闪烁。
-         style-src：页面里还有一段内联 <style>（加载层的不透明底色，
-                    用来杜绝无样式界面闪现）。
-       两处都能换成 hash 或 nonce，但代价是每次改脚本都要同步改策略值——
-       对这个体量不划算。留着并写在这里，好过不留。 -->
+  <!-- CSP：'unsafe-inline' 两处都是必要的，别顺手删——script-src 保的是紧接着下面
+       那段防暗色闪烁的同步脚本（搬成外部文件反而会闪主题），style-src 保的是加载层
+       那段内联 <style>（用来杜绝无样式界面闪现）。-->
   <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
       script-src 'self' 'unsafe-inline';
@@ -27,11 +16,8 @@
       base-uri 'none';
       form-action 'none';
       object-src 'none'">
-       frame-ancestors 写在这里是**无效**的：它只能走 HTTP 响应头，而这里是
-       <meta>——浏览器照常解析然后打一条 console 警告（"directive 'frame-ancestors'
-       is ignored when delivered via a <meta> element"），每页一次。所以不写它：
-       一条每页刷屏的警告换不来任何防护。要防点击劫持得让服务器发 X-Frame-Options，
-       而 GitHub Pages 不给这个口子。
+  <!-- frame-ancestors 只能走响应头，GitHub Pages 发不了，写在这里只会每页刷一条
+       console 警告，故不写。-->
  <title>SnowBlock · 个人导航</title>
  <meta name="description" content="SnowBlock 个人导航页 — 博客、MC 服务器、状态监控、主机监控一站式">
  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2efe9">
@@ -51,7 +37,7 @@
  <meta name="twitter:title" content="SnowBlock · 个人导航">
  <meta name="twitter:description" content="SnowBlock 个人导航 — 博客、MC 服务器、状态监控、主机监控一站式">
  <meta name="twitter:image" content="https://snowblock.top/assets/brand/og-image.png">
- <!-- 品牌 favicon：水晶雪花正式 logo（loader 升格），头像退位为 about 页个人照 -->
+ <!-- favicon：水晶雪花 logo -->
  <link rel="icon" href="assets/brand/favicon.ico" sizes="48x48">
  <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg">
  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
@@ -70,10 +56,7 @@
 
  <link rel="stylesheet" href="assets/css/tokens.css">
  <link rel="stylesheet" href="assets/css/style.css">
-  <!-- toast.css 放在 style.css 之后：它靠层叠盖过 style.css 里的同名规则。
-       以前这里是内联了一份 .toast 的副本，于是同一套样式有两个本体，注释里
-       明写「两份必须一起改」——而真正生效的是后加载的那份。哪份被改都不会
-       立刻见效，很容易让人以为改错了地方。现在只有这一个本体。 -->
+  <!-- toast.css 必须排在 style.css 之后：它靠层叠盖过 style.css 里的同名规则。-->
   <link rel="stylesheet" href="assets/css/toast.css">
 
  <style>
@@ -130,10 +113,8 @@
  .loader-dots span:nth-child(2) { animation-delay:0.2s; }
  .loader-dots span:nth-child(3) { animation-delay:0.4s; }
  @keyframes dotBounce { 0%,100%{transform:translateY(0);opacity:0.3} 50%{transform:translateY(-8px);opacity:1} }
- /* 深色背景挂在 html.dark 上，与本文件顶部的 localStorage 主题脚本同源。
-    此前挂在 @media (prefers-color-scheme: dark) 上，两者不同源：系统浅色 +
-    localStorage 里存过 dark 时，卡片是深色而背景仍是浅色。同仓 404.html
-    与状态站 style.css 早已改用 html.dark，这里是最后一个例外。 */
+ /* 深色背景挂在 html.dark 上，与本文件顶部那段主题脚本同源；挂在
+   @media (prefers-color-scheme: dark) 上会与 localStorage 里的主题打架。 */
  html.dark { color-scheme: dark; }
  html.dark body { background: var(--bg-gradient-body-dark); }
  html.dark body::after { background: url(assets/vendor/images/bg-portrait.webp) center/cover no-repeat, var(--bg-gradient-body-dark); }
@@ -152,9 +133,7 @@
   }
   .status-dot.online { background:var(--status-online); box-shadow:0 0 10px var(--color-success-glow); }
   .status-dot.offline { background:var(--status-offline); box-shadow:0 0 10px rgba(242,94,94,0.30); }
-/* .toast 的样式搬到了 assets/css/toast.css —— 原来这里是内联副本，而真正
-   生效的是后加载的那份，注释里还写着「两份必须一起改」。规则本体躺在没人
-   加载的 CSS 里、页面跑的是另一份，改哪边都不立刻见效。现在只有一个本体。 */
+/* .toast 的样式在 assets/css/toast.css，这里不再保留副本。 */
  @media print {
  body::before { display:none; }
  body { background:#fff!important; padding:1rem; color:#000; }
@@ -166,11 +145,8 @@
 <body>
 
 <!-- ===== 加载层 =====
-     aria-hidden：这是一层几百毫秒后就撤掉的闪屏，不是页面内容。它那句
-     「正在连接雪境」此刻正被读屏念到的话，等它念完，用户已经落到真正的正文上
-     了，而正文在 <main> 里、会被完整播报。不标 aria-hidden 的话，
-     axe 的 region 规则还会判「有内容不在任何 landmark 里」——这是本页唯一
-     一条 a11y 违规，来源就是这个闪屏。 -->
+     aria-hidden：几百毫秒后就撤掉的闪屏，不是页面内容。不标的话 axe 的 region
+     规则会判「有内容不在任何 landmark 里」——本页唯一一条 a11y 违规就来自它。-->
 <div id="loader" aria-hidden="true">
  <div class="loader-crystal">
  <div class="crystal-wrapper">
@@ -240,10 +216,8 @@
   <span class="service-url">blog.snowblock.top</span>
   </a>
 
-  <!-- 状态只写在 .service-desc 这一个节点里，aria-describedby 指向它，
-       视觉和读屏因此读到同一份字符串。原来状态被重复写进 aria-label，
-       而 checkMcStatus() 只更新 .service-desc、不碰 aria-label ——
-       服务器在线时读屏仍然念「离线」。 -->
+  <!-- 状态只写在 .service-desc 这一个节点里，aria-describedby 指向它：
+     视觉与读屏因此读到同一份字符。-->
   <span class="service-item" data-copy="play.snowblock.top" data-mc-address="play.snowblock.top" tabindex="0" role="button"
   aria-label="MC 服务器 play.snowblock.top · 点击复制地址" aria-describedby="mcStatusDesc">
   <span class="status-dot" aria-hidden="true"></span>
